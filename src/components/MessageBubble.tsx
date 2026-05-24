@@ -37,7 +37,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
 
         {message.toolResults && message.toolResults.length > 0 && (
           <div className="mt-4 space-y-2">
-            <p className="text-xs font-medium text-gray-500">Results:</p>
+            <p className="text-xs font-medium text-gray-900">Results:</p>
             {message.toolResults.map((tr) => (
               <div key={tr.toolCallId} className="p-3 bg-gray-50 rounded-lg text-xs font-mono text-gray-800">
                 {tr.error ? (

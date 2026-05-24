@@ -105,7 +105,7 @@ export function InputArea({ mode, isLoading, onSend, onModeChange }: InputAreaPr
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          placeholder="Message MathMind..."
+          placeholder="Message DiscoTutor..."
           className="flex-1 resize-none bg-transparent outline-none text-sm min-h-[24px] max-h-48"
           disabled={isLoading}
           rows={1}

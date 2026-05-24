@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MathMind - 离散数学解题助手",
+  title: "DiscoTutor - 离散数学解题助手",
   description: "AI-powered discrete math problem solver",
 };
 
