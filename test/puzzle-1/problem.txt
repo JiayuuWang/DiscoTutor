@@ -1,0 +1,14 @@
+根据图片内容，文本识别如下：
+
+1. 设 \( Z \) 为整数集合。判断下面的二元关系是否是 \( Z \) 上的二元运算：
+
+(1) \( + = \{((x, y), z) \mid x, y, z \in Z \land z = x + y\} \)；  
+(2) \( - = \{((x, y), z) \mid x, y, z \in Z \land z = x - y\} \)；  
+(3) \( \times = \{((x, y), z) \mid x, y, z \in Z \land z = x \times y\} \)；  
+(4) \( / = \{((x, y), z) \mid x, y, z \in Z \land z = x / y\} \)；  
+(5) \( R = \{((x, y), z) \mid x, y, z \in Z \land z = x^y\} \)；  
+(6) \( \sqrt{} = \{((x, y), z) \mid x, y, z \in Z \land z = \sqrt{x}\} \)；  
+(7) \( \max = \{((x, y), z) \mid x, y, z \in Z \land z = \max(x, y)\} \)；  
+(8) \( \min = \{((x, y), z) \mid x, y, z \in Z \land z = \min(x, y)\} \)；  
+(9) \( GCD = \{((x, y), z) \mid x, y, z \in Z \land z = GCD(x, y)\} \)；  
+(10) \( LCM = \{((x, y), z) \mid x, y, z \in Z \land z = LCM(x, y)\} \)。

@@ -18,7 +18,7 @@ export function ToolCallPanel({ toolCall }: ToolCallPanelProps) {
         </div>
         <p className="text-xs font-semibold text-gray-700">{toolCall.name}</p>
       </div>
-      <pre className="text-xs text-gray-500 font-mono overflow-x-auto">
+      <pre className="text-xs text-gray-800 font-mono overflow-x-auto">
         {JSON.stringify(toolCall.input, null, 2)}
       </pre>
     </div>
