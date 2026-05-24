@@ -2,6 +2,8 @@
 
 An AI-powered discrete mathematics problem solver with conversation and tool calling capabilities.
 
+![dashboard](./public/chat.png)
+
 ## Features
 
 - **Multiple AI Providers**: Support for OpenAI, Anthropic (MiniMax), and Custom endpoints
@@ -83,13 +85,30 @@ src/
 
 ## Configuration Examples
 
-### MiniMax (Anthropic Compatible)
+### Custom Provider (Recommanded)
+(e.g., local LLM)
+| Field | Value |
+|-------|-------|
+| Provider | Custom |
+| API Key | Your API key |
+| Model | Your model name |
+| Base URL | `http://localhost:11434/v1` (Ollama example) |
+
+(e.g., Third-Party LLM Provider)
+| Field | Value |
+|-------|-------|
+| Provider | Custom |
+| API Key | Your API key |
+| Model | Your model name |
+| Base URL | Base URL |
+
+### Anthropic 
 
 | Field | Value |
 |-------|-------|
 | Provider | Anthropic |
 | API Key | `sk-cp-...` |
-| Model | `MiniMax-M2.7` |
+| Model | `Claude-Opus-4.7` |
 | Base URL | `https://api.minimax.io/anthropic` |
 
 ### OpenAI
@@ -98,17 +117,11 @@ src/
 |-------|-------|
 | Provider | OpenAI |
 | API Key | `sk-...` |
-| Model | `gpt-4o` |
+| Model | `gpt-5` |
 | Base URL | `https://api.openai.com/v1` |
 
-### Custom Provider (e.g., local LLM)
 
-| Field | Value |
-|-------|-------|
-| Provider | Custom |
-| API Key | Your API key |
-| Model | Your model name |
-| Base URL | `http://localhost:11434/v1` (Ollama example) |
+
 
 ## Tech Stack
 
