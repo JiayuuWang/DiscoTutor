@@ -21,7 +21,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             : 'bg-white border border-gray-200 shadow-sm'
         }`}
       >
-        <div className="text-sm leading-relaxed whitespace-pre-wrap text-gray-900">{message.content}</div>
+        <div className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</div>
 
         {message.thinking && (
           <ThinkingPanel thinking={message.thinking} />

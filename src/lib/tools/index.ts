@@ -98,23 +98,36 @@ async function webSearch(params: Record<string, unknown>): Promise<ToolExecuteRe
     return { result: null, error: 'No query provided' };
   }
 
-  try {
-    const response = await fetch(
-      `https://ddg-api.vercel.app/search?q=${encodeURIComponent(query)}&num=${numResults}`,
-      { signal: AbortSignal.timeout(10000) }
-    );
+  const apis = [
+    { url: `https://ddg-api.vercel.app/search?q=${encodeURIComponent(query)}&num=${numResults}`, timeout: 8000 },
+    { url: `https://ddg.sanks.dev/search?q=${encodeURIComponent(query)}&num=${numResults}`, timeout: 8000 },
+  ];
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+  for (const api of apis) {
+    try {
+      const response = await fetch(api.url, { signal: AbortSignal.timeout(api.timeout) });
 
-    const data = await response.json() as Array<{ title: string; url: string; snippet?: string }>;
-    return { result: data.map((r) => ({ title: r.title, url: r.url, snippet: r.snippet || '' })) };
-  } catch (error: unknown) {
-    const fetchError = error as { message?: string; name?: string };
-    if (fetchError.name === 'TimeoutError' || fetchError.message?.includes('timeout')) {
-      return { result: null, error: 'Search timeout - please try again later' };
+      if (!response.ok) {
+        continue;
+      }
+
+      const data = await response.json() as Array<{ title?: string; Text?: string; url?: string; FirstURL?: string; snippet?: string }>;
+
+      if (!Array.isArray(data)) {
+        continue;
+      }
+
+      return {
+        result: data.map((r) => ({
+          title: r.title || r.Text || '',
+          url: r.url || r.FirstURL || '',
+          snippet: r.snippet || ''
+        }))
+      };
+    } catch {
+      continue;
     }
-    return { result: null, error: fetchError.message || String(error) };
   }
+
+  return { result: null, error: 'Search failed - please try again later' };
 }
