@@ -98,36 +98,43 @@ async function webSearch(params: Record<string, unknown>): Promise<ToolExecuteRe
     return { result: null, error: 'No query provided' };
   }
 
-  const apis = [
-    { url: `https://ddg-api.vercel.app/search?q=${encodeURIComponent(query)}&num=${numResults}`, timeout: 8000 },
-    { url: `https://ddg.sanks.dev/search?q=${encodeURIComponent(query)}&num=${numResults}`, timeout: 8000 },
-  ];
+  try {
+    const response = await fetch(
+      `https://cn.bing.com/search?q=${encodeURIComponent(query)}&format=rss&count=${numResults}`,
+      { signal: AbortSignal.timeout(15000) }
+    );
 
-  for (const api of apis) {
-    try {
-      const response = await fetch(api.url, { signal: AbortSignal.timeout(api.timeout) });
-
-      if (!response.ok) {
-        continue;
-      }
-
-      const data = await response.json() as Array<{ title?: string; Text?: string; url?: string; FirstURL?: string; snippet?: string }>;
-
-      if (!Array.isArray(data)) {
-        continue;
-      }
-
-      return {
-        result: data.map((r) => ({
-          title: r.title || r.Text || '',
-          url: r.url || r.FirstURL || '',
-          snippet: r.snippet || ''
-        }))
-      };
-    } catch {
-      continue;
+    if (!response.ok) {
+      return { result: null, error: `Search failed: HTTP ${response.status}` };
     }
-  }
 
-  return { result: null, error: 'Search failed - please try again later' };
+    const text = await response.text();
+    const items: Array<{ title: string; url: string; snippet: string }> = [];
+
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+    let match;
+    while ((match = itemRegex.exec(text)) !== null && items.length < numResults) {
+      const item = match[1];
+      const title = (item.match(/<title>([^<]*)<\/title>/)?.[1] || '').replace(/&amp;/g, '&');
+      const link = (item.match(/<link>([^<]*)<\/link>/)?.[1] || '').replace(/&amp;/g, '&');
+      const rawDesc = item.match(/<description>([^<]*)<\/description>/)?.[1] || '';
+      const description = rawDesc.replace(/<[^>]+>/g, '').substring(0, 200).replace(/&amp;/g, '&');
+
+      if (title && link) {
+        items.push({ title, url: link, snippet: description });
+      }
+    }
+
+    if (items.length === 0) {
+      return { result: null, error: 'No results found' };
+    }
+
+    return { result: items };
+  } catch (error: unknown) {
+    const err = error as { name?: string; message?: string };
+    if (err.name === 'TimeoutError' || err.message?.includes('timeout')) {
+      return { result: null, error: 'Search timeout - please try again' };
+    }
+    return { result: null, error: err.message || 'Search failed' };
+  }
 }
